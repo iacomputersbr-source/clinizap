@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CliniZap - Painel da Clinica</title>
+<style>
+:root{--blanco:#FFFFFF;--negro:#0B0B0F;--morado:#6D28D9;--violeta:#8B5CF6;--lila:#F4EFFE;--gris:#6B6B76}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:var(--blanco);color:var(--negro)}
+.top{background:var(--negro);color:#fff;padding:18px 14px;text-align:center}
+.top h1{font-size:26px}.top h1 span{color:var(--violeta)}.top small{color:#B9B3D9}
+.wrap{max-width:680px;margin:0 auto;padding:12px}
+.card{background:var(--blanco);border:1px solid #ECE7F9;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 2px 10px rgba(109,40,217,.06)}
+.card h3{color:var(--morado);margin-bottom:10px;font-size:17px}
+.btn{display:block;background:var(--morado);color:#fff;text-align:center;padding:15px;border-radius:12px;font-weight:bold;border:0;width:100%;font-size:15px;margin:8px 0;cursor:pointer}
+.btn:hover{background:var(--violeta)}
+.btn-negro{background:var(--negro)}
+input,select{width:100%;padding:13px;margin:7px 0;border:1.5px solid #DDD6F5;border-radius:10px;font-size:15px}
+input:focus,select:focus{outline:none;border-color:var(--morado)}
+table{width:100%;font-size:13px;border-collapse:collapse}
+td,th{padding:10px 8px;border-bottom:1px solid #F0EBFD;text-align:left}
+th{color:var(--morado);font-size:12px;text-transform:uppercase}
+.badge-n{display:inline-block;background:var(--morado);color:#fff;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:bold}
+.tabs{display:flex;gap:8px;margin:12px 0}
+.tab{flex:1;text-align:center;padding:12px 4px;background:var(--blanco);border-radius:12px;font-size:13px;font-weight:bold;color:var(--morado);border:2px solid var(--morado);cursor:pointer}
+.tab.on{background:var(--morado);color:#fff}
+.hidden{display:none!important}
+small{color:var(--gris)}
+.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.rep-box{background:var(--lila);border-radius:12px;padding:14px;text-align:center}
+.rep-box b{font-size:22px;color:var(--morado);display:block}
+.rep-box span{font-size:12px;color:var(--gris)}
+@media(max-width:420px){.rep-grid{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<div class="top"><h1>Clini<span>Zap</span></h1><small>Painel da clinica</small></div>
+<div class="wrap">
+<div class="card" id="licCard">
+<h3>Ativacao da licenca</h3>
+<small>ID do PC (HWID):</small>
+<input id="hwid" readonly>
+<input id="key" placeholder="XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" maxlength="29" style="text-transform:uppercase">
+<button class="btn" onclick="ativar()">ATIVAR LICENCA</button>
+<small>Comprou? Peca sua chave no WhatsApp +55 (41) 99729-4355</small>
+</div>
+<div id="app" class="hidden">
+<div class="tabs">
+<div class="tab on" onclick="aba('agenda',this)">Agenda</div>
+<div class="tab" onclick="aba('nova',this)">Nova cita</div>
+<div class="tab" onclick="aba('rep',this)">Relatorios</div>
+</div>
+<div class="card" id="aba-agenda">
+<h3>Citas de hoje <span class="badge-n" id="totalHoje"></span></h3>
+<div style="overflow-x:auto"><table><thead><tr><th>Hora</th><th>Paciente</th><th>Esp.</th><th>Status</th></tr></thead>
+<tbody id="lista"></tbody></table></div>
+<small>Toque no status para avancar: Agendada &gt; Confirmada &gt; Compareceu / Faltou / Cancelada</small>
+</div>
+<div class="card hidden" id="aba-nova">
+<h3>Agendar (simula o bot)</h3>
+<input id="nNome" placeholder="Nome do paciente">
+<select id="nEsp"><option>Dermato</option><option>Odonto</option><option>Fisio</option></select>
+<input id="nHora" type="time">
+<button class="btn" onclick="agendar()">AGENDAR</button>
+<small>Anti-falha: horario ocupado e bloqueado, sem reserva dupla.</small>
+</div>
+<div class="card hidden" id="aba-rep">
+<h3>Relatorios da clinica</h3>
+<div class="rep-grid" id="reps"></div>
+<div id="repDet"></div>
+<button class="btn btn-negro" onclick="exportar()">EXPORTAR CSV</button>
+</div>
+</div>
+</div>
+<script src="app.js"></script>
+</body></html>
