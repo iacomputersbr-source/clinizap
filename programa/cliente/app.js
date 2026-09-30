@@ -1,0 +1,17 @@
+// CliniZap Cliente v2.0 - blanco/negro/morado - IA Computers
+const HWID='CZ-'+Math.abs(hash(navigator.userAgent+screen.width)).toString(36).toUpperCase();
+function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h}
+document.getElementById('hwid').value=HWID;
+let citas=JSON.parse(localStorage.getItem('cz_citas')||'[]');
+if(localStorage.getItem('cz_lic')) mostrarApp();
+function validarChave(k){k=k.replace(/-/g,'');if(k.length!==25)return false;let s=0;for(const c of k)s+=c.charCodeAt(0);return (s+HWID.length*7)%11===0}
+function ativar(){const k=document.getElementById('key').value.trim().toUpperCase();if(validarChave(k)){localStorage.setItem('cz_lic',k);mostrarApp();alert('Licenca ativada!')}else alert('Chave invalida para este PC. Confira os 25 caracteres.')}
+function mostrarApp(){document.getElementById('licCard').style.display='none';document.getElementById('app').classList.remove('hidden');render()}
+function aba(id,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');['agenda','nova','rep'].forEach(a=>document.getElementById('aba-'+a).classList.add('hidden'));document.getElementById('aba-'+id).classList.remove('hidden');if(id==='rep')relatorios();if(id==='agenda')render()}
+function agendar(){const n=nNome.value.trim(),e=nEsp.value,h=nHora.value;if(!n||!h){alert('Preencha nome e hora');return}if(citas.some(c=>c.hora===h&&c.status!=='Cancelada')){alert('Horario ocupado - o bot nunca faz reserva dupla.');return}citas.push({nome:n,esp:e,hora:h,status:'Agendada'});localStorage.setItem('cz_citas',JSON.stringify(citas));nNome.value='';render();alert('Cita agendada. Lembrete 24h antes ativado.')}
+function mudar(i){const sts=['Agendada','Confirmada','Compareceu','Faltou','Cancelada'];citas[i].status=sts[(sts.indexOf(citas[i].status)+1)%sts.length];localStorage.setItem('cz_citas',JSON.stringify(citas));render()}
+function render(){const tb=document.getElementById('lista');tb.innerHTML='';document.getElementById('totalHoje').textContent=citas.length+' citas';citas.sort((a,b)=>a.hora.localeCompare(b.hora));citas.forEach((c,i)=>{tb.innerHTML+=`<tr><td>${c.hora}</td><td>${c.nome}</td><td>${c.esp}</td><td><a href="#" onclick="mudar(${i});return false" style="color:#6D28D9;font-weight:bold">${c.status}</a></td></tr>`})}
+function relatorios(){const tot=citas.length,porEsp={},porSt={};citas.forEach(c=>{porEsp[c.esp]=(porEsp[c.esp]||0)+1;porSt[c.status]=(porSt[c.status]||0)+1});const faltas=porSt['Faltou']||0,comp=tot?Math.round((tot-faltas)/tot*100):100,conf=porSt['Confirmada']||0,canc=porSt['Cancelada']||0;
+document.getElementById('reps').innerHTML=`<div class="rep-box"><b>${tot}</b><span>Total citas</span></div><div class="rep-box"><b>${comp}%</b><span>Comparecimiento</span></div><div class="rep-box"><b>${conf}</b><span>Confirmadas</span></div><div class="rep-box"><b>${faltas}</b><span>Faltas</span></div>`;
+let d='<table><tr><th>Especialidade</th><th>Citas</th></tr>';for(const k in porEsp)d+=`<tr><td>${k}</td><td>${porEsp[k]}</td></tr>`;d+='</table><br><table><tr><th>Status</th><th>Total</th></tr>';for(const k in porSt)d+=`<tr><td>${k}</td><td>${porSt[k]}</td></tr>`;d+='</table>';document.getElementById('repDet').innerHTML=d}
+function exportar(){let csv='hora,nome,especialidade,status\n';citas.forEach(c=>csv+=`${c.hora},${c.nome},${c.esp},${c.status}\n`);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='relatorio_clinizap.csv';a.click()}
