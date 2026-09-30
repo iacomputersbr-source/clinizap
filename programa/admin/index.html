@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CliniZap Admin - Licencias</title>
+<style>
+:root{--blanco:#FFFFFF;--negro:#0B0B0F;--morado:#6D28D9;--violeta:#8B5CF6;--lila:#F4EFFE;--gris:#6B6B76}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:var(--blanco);color:var(--negro)}
+.top{background:var(--negro);color:#fff;padding:18px 14px;text-align:center}
+.top h1{font-size:26px}.top h1 span{color:var(--violeta)}.top small{color:#B9B3D9}
+.wrap{max-width:680px;margin:0 auto;padding:12px}
+.card{background:var(--blanco);border:1px solid #ECE7F9;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 2px 10px rgba(109,40,217,.06)}
+.card h3{color:var(--morado);margin-bottom:10px}
+.btn{display:block;background:var(--morado);color:#fff;text-align:center;padding:15px;border-radius:12px;font-weight:bold;border:0;width:100%;font-size:15px;margin:8px 0;cursor:pointer}
+.btn:hover{background:var(--violeta)}
+input{width:100%;padding:13px;margin:7px 0;border:1.5px solid #DDD6F5;border-radius:10px;font-size:15px}
+table{width:100%;font-size:13px;border-collapse:collapse}
+td,th{padding:10px 8px;border-bottom:1px solid #F0EBFD;text-align:left}
+th{color:var(--morado);font-size:12px;text-transform:uppercase}
+code{background:var(--lila);color:var(--morado);padding:5px 8px;border-radius:8px;font-size:12px;word-break:break-all}
+small{color:var(--gris)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.switch{width:54px;height:30px;background:#CFCFCF;border-radius:20px;position:relative;cursor:pointer;flex-shrink:0}
+.switch.on{background:var(--morado)}
+.knob{width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.2s}
+.switch.on .knob{left:27px}
+</style></head><body>
+<div class="top"><h1>Clini<span>Zap</span> Admin</h1><small>Solo tu - IA Computers</small></div>
+<div class="wrap">
+<div class="card">
+<h3>Generar licencia (25 caracteres)</h3>
+<input id="cli" placeholder="Nombre clinica">
+<input id="hw" placeholder="HWID del cliente (lo ves en su pantalla)">
+<button class="btn" onclick="generar()">GENERAR CLAVE</button>
+<div id="out" style="margin-top:10px"></div>
+</div>
+<div class="card">
+<h3>Mis clientes</h3>
+<div style="overflow-x:auto"><table><thead><tr><th>Clinica</th><th>Clave</th><th>Estado</th></tr></thead><tbody id="lc"></tbody></table></div>
+</div>
+<div class="card"><small><b>Flujo de venta:</b> 1) Envias <b>cliente/index.html</b> + <b>cliente/app.js</b> por WhatsApp/email. 2) Cliente abre, copia su HWID y te lo envia + R$149,90. 3) Generas la clave aqui y se la envias. 4) El se activa solo.</small></div>
+</div>
+<script src="admin.js"></script>
+</body></html>
